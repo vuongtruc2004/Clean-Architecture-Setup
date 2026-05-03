@@ -1,0 +1,7 @@
+plugins {
+    id("java-common-conventions")
+}
+
+dependencies {
+    implementation(project(":core:domain"))
+}

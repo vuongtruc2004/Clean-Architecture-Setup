@@ -1,0 +1,25 @@
+server:
+  port: 8386
+spring:
+  application:
+    name: clean-architecture-setup
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        enable_lazy_load_no_trans: true
+        format_sql: true
+        jdbc:
+          batch_size: 1000
+    show-sql: false
+
+  profiles:
+    active: dev

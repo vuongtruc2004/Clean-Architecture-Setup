@@ -19,7 +19,9 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderItemEntity extends BaseEntity {
     Long productId;
+
     Integer quantity;
+    
     BigDecimal unitPrice;
 
     @ManyToOne

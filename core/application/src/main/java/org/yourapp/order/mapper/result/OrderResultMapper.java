@@ -1,13 +1,13 @@
-package org.yourapp.order.mapper;
+package org.yourapp.order.mapper.result;
 
 import org.yourapp.order.model.Order;
 import org.yourapp.order.result.OrderResult;
 
-public class OrderMapper {
-    private final OrderItemMapper orderItemMapper;
+public class OrderResultMapper {
+    private final OrderItemResultMapper orderItemResultMapper;
 
-    public OrderMapper(OrderItemMapper orderItemMapper) {
-        this.orderItemMapper = orderItemMapper;
+    public OrderResultMapper(OrderItemResultMapper orderItemResultMapper) {
+        this.orderItemResultMapper = orderItemResultMapper;
     }
 
     public OrderResult mapOrderToOrderResult(Order order) {
@@ -17,7 +17,7 @@ public class OrderMapper {
                 order.getStatus().name(),
                 order.getOrderItems()
                         .stream()
-                        .map(orderItemMapper::mapOrderItemToOrderItemResult)
+                        .map(orderItemResultMapper::mapOrderItemToOrderItemResult)
                         .toList()
         );
     }

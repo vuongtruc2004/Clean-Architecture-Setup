@@ -1,8 +1,8 @@
 package org.yourapp.order.usecase;
 
 import org.yourapp.order.command.CreateOrderCommand;
-import org.yourapp.order.mapper.OrderItemMapper;
-import org.yourapp.order.mapper.OrderMapper;
+import org.yourapp.order.mapper.command.OrderItemCommandMapper;
+import org.yourapp.order.mapper.result.OrderResultMapper;
 import org.yourapp.order.model.Order;
 import org.yourapp.order.model.OrderItem;
 import org.yourapp.order.port.in.CreateOrderInputPort;
@@ -16,19 +16,19 @@ import java.util.List;
 public class CreateOrderUseCase implements CreateOrderInputPort {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    private final OrderItemMapper orderItemMapper;
-    private final OrderMapper orderMapper;
+    private final OrderItemCommandMapper orderItemCommandMapper;
+    private final OrderResultMapper orderResultMapper;
 
     public CreateOrderUseCase(
             OrderRepository orderRepository,
             UserRepository userRepository,
-            OrderItemMapper orderItemMapper,
-            OrderMapper orderMapper
+            OrderItemCommandMapper orderItemCommandMapper,
+            OrderResultMapper orderResultMapper
     ) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
-        this.orderItemMapper = orderItemMapper;
-        this.orderMapper = orderMapper;
+        this.orderItemCommandMapper = orderItemCommandMapper;
+        this.orderResultMapper = orderResultMapper;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class CreateOrderUseCase implements CreateOrderInputPort {
 
         List<OrderItem> orderItems = command.orderItems()
                 .stream()
-                .map(orderItemMapper::mapCreateOrderItemCommandToOrderItem)
+                .map(orderItemCommandMapper::mapCreateOrderItemCommandToOrderItem)
                 .toList();
 
         Order order = Order.create(command.userId(), orderItems);
 
-        Order savedOrder = orderRepository.save(order);
-        return orderMapper.mapOrderToOrderResult(savedOrder);
+        Order savedOrder = orderRepository.create(order);
+        return orderResultMapper.mapOrderToOrderResult(savedOrder);
     }
 }

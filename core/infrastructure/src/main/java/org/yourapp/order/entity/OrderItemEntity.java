@@ -10,6 +10,7 @@ import org.yourapp.shared.entity.BaseEntity;
 
 import java.math.BigDecimal;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class OrderItemEntity extends BaseEntity {
     Long productId;
 
     Integer quantity;
-    
+
     BigDecimal unitPrice;
 
     @ManyToOne

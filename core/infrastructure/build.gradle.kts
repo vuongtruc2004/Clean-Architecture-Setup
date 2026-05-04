@@ -27,14 +27,16 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:application"))
 
-    // MapStruct
-    implementation("org.mapstruct:mapstruct:1.6.3")
-
     // lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
+
+    // flyway
+    implementation("org.springframework.boot:spring-boot-starter-flyway")
+    implementation("org.flywaydb:flyway-mysql:11.20.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:4.0.1")

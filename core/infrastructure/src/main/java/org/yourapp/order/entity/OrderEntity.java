@@ -9,6 +9,7 @@ import org.yourapp.user.entity.UserEntity;
 
 import java.util.List;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

@@ -11,6 +11,7 @@ import org.yourapp.shared.entity.BaseEntity;
 
 import java.util.List;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

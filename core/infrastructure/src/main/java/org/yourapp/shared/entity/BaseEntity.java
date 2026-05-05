@@ -31,6 +31,7 @@ public abstract class BaseEntity {
 
     @PrePersist
     private void handlePrePersist() {
+        createdBy = "system";
         createdTime = Instant.now();
     }
 

@@ -25,6 +25,6 @@ public class OrderEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     UserEntity user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     List<OrderItemEntity> orderItems;
 }

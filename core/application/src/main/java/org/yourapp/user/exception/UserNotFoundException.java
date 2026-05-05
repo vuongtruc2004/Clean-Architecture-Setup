@@ -1,9 +1,11 @@
 package org.yourapp.user.exception;
 
 import org.yourapp.shared.exception.ApplicationException;
+import org.yourapp.shared.exception.ErrorCode;
 
 public class UserNotFoundException extends ApplicationException {
-    public UserNotFoundException(Long id) {
-        super(UserApplicationErrorCode.USER_NOT_FOUND);
+
+    public UserNotFoundException(ErrorCode errorCode, String detailMessage) {
+        super(errorCode, detailMessage);
     }
 }

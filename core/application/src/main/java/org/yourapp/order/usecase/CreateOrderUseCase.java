@@ -8,6 +8,7 @@ import org.yourapp.order.model.OrderItem;
 import org.yourapp.order.port.in.CreateOrderInputPort;
 import org.yourapp.order.port.out.OrderRepository;
 import org.yourapp.order.result.OrderResult;
+import org.yourapp.user.exception.UserApplicationErrorCode;
 import org.yourapp.user.exception.UserNotFoundException;
 import org.yourapp.user.port.out.UserRepository;
 
@@ -34,7 +35,10 @@ public class CreateOrderUseCase implements CreateOrderInputPort {
     @Override
     public OrderResult createOrder(CreateOrderCommand command) {
         if (!userRepository.existsById(command.userId())) {
-            throw new UserNotFoundException(command.userId());
+            throw new UserNotFoundException(
+                    UserApplicationErrorCode.USER_NOT_FOUND,
+                    "User with id " + command.userId() + " not found"
+            );
         }
 
         List<OrderItem> orderItems = command.orderItems()
@@ -44,7 +48,8 @@ public class CreateOrderUseCase implements CreateOrderInputPort {
 
         Order order = Order.create(command.userId(), orderItems);
 
-        Order savedOrder = orderRepository.create(order);
-        return orderResultMapper.mapOrderToOrderResult(savedOrder);
+        // lưu xuống database
+        Order createdOrder = orderRepository.create(order);
+        return orderResultMapper.mapOrderToOrderResult(createdOrder);
     }
 }

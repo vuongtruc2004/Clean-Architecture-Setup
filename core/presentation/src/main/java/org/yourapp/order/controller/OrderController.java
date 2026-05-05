@@ -2,6 +2,7 @@ package org.yourapp.order.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.yourapp.order.port.in.CreateOrderInputPort;
 import org.yourapp.order.request.CreateOrderRequest;
 import org.yourapp.order.response.OrderResponse;
 import org.yourapp.order.result.OrderResult;
+import org.yourapp.shared.annotation.ApiResponseMessage;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -23,11 +25,20 @@ public class OrderController {
     private final OrderResponseMapper orderResponseMapper;
     private final CreateOrderInputPort createOrderInputPort;
 
+    @ApiResponseMessage(message = "Create order successfully!")
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request) {
         CreateOrderCommand createOrderCommand = orderRequestMapper.mapCreateOrderRequestToCreateOrderCommand(request);
         OrderResult orderResult = createOrderInputPort.createOrder(createOrderCommand);
         OrderResponse orderResponse = orderResponseMapper.mapOrderResultToOrderResponse(orderResult);
-        return ResponseEntity.ok(orderResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponse);
     }
+
+//    @ApiResponseMessage(message = "Create order successfully!")
+//    @PostMapping
+//    public OrderResponse createOrder(@Valid @RequestBody CreateOrderRequest request) {
+//        CreateOrderCommand createOrderCommand = orderRequestMapper.mapCreateOrderRequestToCreateOrderCommand(request);
+//        OrderResult orderResult = createOrderInputPort.createOrder(createOrderCommand);
+//        return orderResponseMapper.mapOrderResultToOrderResponse(orderResult);
+//    }
 }

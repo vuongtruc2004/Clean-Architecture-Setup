@@ -12,11 +12,11 @@ public enum OrderErrorCode implements ErrorCode {
     ORDER_NOT_MODIFIABLE("ORDER_007", "order.not.modifiable");
 
     private final String code;
-    private final String detailMessageKey;
+    private final String title;
 
-    OrderErrorCode(String code, String detailMessageKey) {
+    OrderErrorCode(String code, String title) {
         this.code = code;
-        this.detailMessageKey = detailMessageKey;
+        this.title = title;
     }
 
     @Override
@@ -25,7 +25,7 @@ public enum OrderErrorCode implements ErrorCode {
     }
 
     @Override
-    public String getDetailMessageKey() {
-        return detailMessageKey;
+    public String getTitle() {
+        return title;
     }
 }

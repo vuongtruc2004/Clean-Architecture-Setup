@@ -2,7 +2,6 @@ package org.yourapp.order.model;
 
 import org.yourapp.order.exception.OrderErrorCode;
 import org.yourapp.shared.exception.DomainException;
-import org.yourapp.shared.model.Money;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +23,10 @@ public class Order {
     // create new order
     public static Order create(Long userId, List<OrderItem> orderItems) {
         if (orderItems == null || orderItems.isEmpty()) {
-            throw new DomainException(OrderErrorCode.ORDER_ITEMS_EMPTY);
+            throw new DomainException(
+                    OrderErrorCode.ORDER_ITEMS_EMPTY,
+                    "Order items cannot be empty"
+            );
         }
         return new Order(null, userId, OrderStatus.DRAFT, orderItems);
     }
@@ -32,47 +34,6 @@ public class Order {
     // reconstitute order from DB
     public static Order reconstitute(Long id, Long userId, OrderStatus status, List<OrderItem> orderItems) {
         return new Order(id, userId, status, orderItems);
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-        if (status != OrderStatus.DRAFT) {
-            throw new DomainException(OrderErrorCode.ORDER_NOT_MODIFIABLE);
-        }
-        orderItems.add(orderItem);
-    }
-
-    public void pay() {
-        if (status == OrderStatus.CANCELLED) {
-            throw new DomainException(OrderErrorCode.ORDER_CANCELLED);
-        }
-        if (status == OrderStatus.PAID) {
-            throw new DomainException(OrderErrorCode.ORDER_ALREADY_PAID);
-        }
-
-        status = OrderStatus.PAID;
-    }
-
-    public void cancel() {
-        if (status == OrderStatus.CANCELLED) {
-            throw new DomainException(OrderErrorCode.ORDER_CANCELLED);
-        }
-
-        if (status == OrderStatus.DELIVERED) {
-            throw new DomainException(OrderErrorCode.ORDER_ALREADY_DELIVERED);
-        }
-
-        if (status == OrderStatus.PAID) {
-            throw new DomainException(OrderErrorCode.ORDER_ALREADY_PAID);
-        }
-
-        status = OrderStatus.CANCELLED;
-    }
-
-    public Money getTotalPrice() {
-        return orderItems
-                .stream()
-                .map(OrderItem::subtotal)
-                .reduce(Money.zero(), Money::add);
     }
 
     public Long getId() {

@@ -12,10 +12,16 @@ public record CreateOrderItemCommand(
 ) {
     public CreateOrderItemCommand {
         if (productId == null) {
-            throw new InvalidCommandException(CommandErrorCode.REQUIRED_FIELD_MISSING);
+            throw new InvalidCommandException(
+                    CommandErrorCode.REQUIRED_FIELD_MISSING,
+                    "productId is required"
+            );
         }
         if (unitPrice == null) {
-            throw new InvalidCommandException(CommandErrorCode.REQUIRED_FIELD_MISSING);
+            throw new InvalidCommandException(
+                    CommandErrorCode.REQUIRED_FIELD_MISSING,
+                    "unitPrice is required"
+            );
         }
     }
 }

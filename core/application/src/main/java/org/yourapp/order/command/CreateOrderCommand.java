@@ -11,11 +11,17 @@ public record CreateOrderCommand(
 ) {
     public CreateOrderCommand {
         if (userId == null) {
-            throw new InvalidCommandException(CommandErrorCode.REQUIRED_FIELD_MISSING);
+            throw new InvalidCommandException(
+                    CommandErrorCode.REQUIRED_FIELD_MISSING,
+                    "userId is required"
+            );
         }
 
         if (orderItems == null || orderItems.isEmpty()) {
-            throw new InvalidCommandException(CommandErrorCode.EMPTY_LIST);
+            throw new InvalidCommandException(
+                    CommandErrorCode.EMPTY_LIST,
+                    "orderItems is required"
+            );
         }
     }
 }

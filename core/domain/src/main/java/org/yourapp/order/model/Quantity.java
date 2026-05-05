@@ -12,7 +12,10 @@ public final class Quantity {
 
     public static Quantity of(int value) {
         if (value <= 0) {
-            throw new DomainException(OrderErrorCode.INVALID_QUANTITY);
+            throw new DomainException(
+                    OrderErrorCode.INVALID_QUANTITY,
+                    "Quantity must be greater than 0"
+            );
         }
         return new Quantity(value);
     }

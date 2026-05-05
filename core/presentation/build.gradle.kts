@@ -24,6 +24,7 @@ dependencyManagement {
 
 dependencies {
     // project dependencies
+    implementation(project(":core:domain"))
     implementation(project(":core:application"))
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -31,6 +32,8 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
     testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testCompileOnly("org.projectlombok:lombok")

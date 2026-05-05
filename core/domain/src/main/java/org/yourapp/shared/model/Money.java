@@ -1,6 +1,5 @@
 package org.yourapp.shared.model;
 
-import org.yourapp.order.model.Quantity;
 import org.yourapp.shared.exception.DomainException;
 import org.yourapp.shared.exception.SharedErrorCode;
 
@@ -15,13 +14,16 @@ public final class Money {
 
     public static Money of(BigDecimal value) {
         if (value == null || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new DomainException(SharedErrorCode.INVALID_MONEY_VALUE);
+            throw new DomainException(
+                    SharedErrorCode.INVALID_MONEY_VALUE,
+                    "Money value must be greater than 0"
+            );
         }
         return new Money(value);
     }
 
-    public Money multiply(Quantity quantity) {
-        return new Money(value.multiply(BigDecimal.valueOf(quantity.getValue())));
+    public Money multiply(int quantity) {
+        return new Money(value.multiply(BigDecimal.valueOf(quantity)));
     }
 
     public Money add(Money other) {

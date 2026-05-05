@@ -4,11 +4,11 @@ public enum SharedErrorCode implements ErrorCode {
     INVALID_MONEY_VALUE("SHARED_001", "shared.money.invalid");
 
     private final String code;
-    private final String detailMessageKey;
+    private final String title;
 
-    SharedErrorCode(String code, String detailMessageKey) {
+    SharedErrorCode(String code, String title) {
         this.code = code;
-        this.detailMessageKey = detailMessageKey;
+        this.title = title;
     }
 
     @Override
@@ -17,7 +17,7 @@ public enum SharedErrorCode implements ErrorCode {
     }
 
     @Override
-    public String getDetailMessageKey() {
-        return detailMessageKey;
+    public String getTitle() {
+        return title;
     }
 }

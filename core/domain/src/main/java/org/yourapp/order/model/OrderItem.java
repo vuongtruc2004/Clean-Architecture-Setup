@@ -26,7 +26,7 @@ public class OrderItem {
     }
 
     public Money subtotal() {
-        return unitPrice.multiply(quantity);
+        return unitPrice.multiply(quantity.getValue());
     }
 
     public Long getId() {

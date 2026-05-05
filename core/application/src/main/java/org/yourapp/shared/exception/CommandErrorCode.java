@@ -6,11 +6,11 @@ public enum CommandErrorCode implements ErrorCode {
     ;
 
     private final String code;
-    private final String detailMessageKey;
+    private final String title;
 
-    CommandErrorCode(String code, String detailMessageKey) {
+    CommandErrorCode(String code, String title) {
         this.code = code;
-        this.detailMessageKey = detailMessageKey;
+        this.title = title;
     }
 
     @Override
@@ -19,7 +19,7 @@ public enum CommandErrorCode implements ErrorCode {
     }
 
     @Override
-    public String getDetailMessageKey() {
-        return detailMessageKey;
+    public String getTitle() {
+        return title;
     }
 }

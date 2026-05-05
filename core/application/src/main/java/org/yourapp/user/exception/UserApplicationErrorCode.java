@@ -6,11 +6,11 @@ public enum UserApplicationErrorCode implements ErrorCode {
     USER_NOT_FOUND("USER_404", "user.not.found");
 
     private final String code;
-    private final String detailMessageKey;
+    private final String title;
 
-    UserApplicationErrorCode(String code, String detailMessageKey) {
+    UserApplicationErrorCode(String code, String title) {
         this.code = code;
-        this.detailMessageKey = detailMessageKey;
+        this.title = title;
     }
 
     @Override
@@ -19,7 +19,7 @@ public enum UserApplicationErrorCode implements ErrorCode {
     }
 
     @Override
-    public String getDetailMessageKey() {
-        return detailMessageKey;
+    public String getTitle() {
+        return title;
     }
 }

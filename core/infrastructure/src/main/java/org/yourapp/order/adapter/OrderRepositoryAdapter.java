@@ -8,7 +8,6 @@ import org.yourapp.order.model.Order;
 import org.yourapp.order.port.out.OrderRepository;
 import org.yourapp.order.repository.OrderJpaRepository;
 import org.yourapp.user.entity.UserEntity;
-import org.yourapp.user.exception.UserNotFoundException;
 import org.yourapp.user.repository.UserJpaRepository;
 
 import java.util.Optional;
@@ -22,8 +21,9 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     @Override
     public Order create(Order order) {
-        UserEntity userEntity = userJpaRepository.findById(order.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(order.getUserId()));
+        // hibernate tạo ra 1 object UserEntity chỉ có id
+        // => vẫn lưu xuống db được vì chỉ cần user id
+        UserEntity userEntity = userJpaRepository.getReferenceById(order.getUserId());
 
         OrderEntity orderEntity = orderEntityMapper.mapOrderToOrderEntity(order, userEntity);
         OrderEntity savedOrderEntity = orderJpaRepository.save(orderEntity);

@@ -11,13 +11,19 @@ public record Email(String value) {
 
     public Email {
         if (value == null || value.isBlank()) {
-            throw new DomainException(UserErrorCode.EMAIL_REQUIRED);
+            throw new DomainException(
+                    UserErrorCode.EMAIL_REQUIRED,
+                    "Email is required"
+            );
         }
 
         value = value.trim().toLowerCase();
 
         if (!EMAIL_PATTERN.matcher(value).matches()) {
-            throw new DomainException(UserErrorCode.EMAIL_NOT_VALID);
+            throw new DomainException(
+                    UserErrorCode.EMAIL_NOT_VALID,
+                    value + " is not a valid email"
+            );
         }
     }
 }

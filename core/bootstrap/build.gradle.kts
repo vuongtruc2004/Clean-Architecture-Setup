@@ -24,6 +24,16 @@ dependencies {
     implementation(project(":core:infrastructure"))
     implementation(project(":core:presentation"))
 
+    // log4j2
+    implementation("org.springframework.boot:spring-boot-starter-log4j2")
+    runtimeOnly("org.apache.logging.log4j:log4j-layout-template-json:2.25.4")
+    
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")

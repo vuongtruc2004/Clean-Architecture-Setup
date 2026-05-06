@@ -5,7 +5,7 @@ import org.yourapp.shared.exception.ErrorCode;
 
 public class UserNotFoundException extends ApplicationException {
 
-    public UserNotFoundException(ErrorCode errorCode, String detailMessage) {
-        super(errorCode, detailMessage);
+    public UserNotFoundException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
     }
 }

@@ -27,6 +27,15 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:application"))
 
+    // log4j2
+    implementation("org.springframework.boot:spring-boot-starter-log4j2")
+
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
+
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")

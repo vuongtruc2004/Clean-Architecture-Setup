@@ -7,6 +7,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -31,6 +32,9 @@ public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
         if (ProblemDetail.class.isAssignableFrom(returnType.getParameterType())) {
             return false;
         }
+        if (ByteArrayHttpMessageConverter.class.isAssignableFrom(converterType)) {
+            return false;
+        }
         return true;
     }
 
@@ -44,7 +48,8 @@ public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
     ) {
         if (body == null ||
                 body instanceof ApiResponse<?> ||
-                body instanceof ProblemDetail) {
+                body instanceof ProblemDetail ||
+                body instanceof ByteArrayHttpMessageConverter) {
             return body;
         }
 

@@ -1,4 +1,4 @@
-package org.yourapp.order.controller;
+package org.yourapp.order.controller.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,12 +32,4 @@ public class OrderController {
         OrderResponse orderResponse = orderResponseMapper.mapOrderResultToOrderResponse(orderResult);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponse);
     }
-
-//    @ApiResponseMessage(message = "Create order successfully!")
-//    @PostMapping
-//    public OrderResponse createOrder(@Valid @RequestBody CreateOrderRequest request) {
-//        CreateOrderCommand createOrderCommand = orderRequestMapper.mapCreateOrderRequestToCreateOrderCommand(request);
-//        OrderResult orderResult = createOrderInputPort.createOrder(createOrderCommand);
-//        return orderResponseMapper.mapOrderResultToOrderResponse(orderResult);
-//    }
 }

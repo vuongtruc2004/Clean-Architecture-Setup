@@ -8,8 +8,8 @@ import org.yourapp.order.model.OrderItem;
 import org.yourapp.order.port.in.CreateOrderInputPort;
 import org.yourapp.order.port.out.OrderRepository;
 import org.yourapp.order.result.OrderResult;
+import org.yourapp.shared.exception.NotFoundException;
 import org.yourapp.user.exception.UserApplicationErrorCode;
-import org.yourapp.user.exception.UserNotFoundException;
 import org.yourapp.user.port.out.UserRepository;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class CreateOrderUseCase implements CreateOrderInputPort {
     @Override
     public OrderResult createOrder(CreateOrderCommand command) {
         if (!userRepository.existsById(command.userId())) {
-            throw new UserNotFoundException(
+            throw new NotFoundException(
                     UserApplicationErrorCode.USER_NOT_FOUND,
                     "User with id " + command.userId() + " not found"
             );

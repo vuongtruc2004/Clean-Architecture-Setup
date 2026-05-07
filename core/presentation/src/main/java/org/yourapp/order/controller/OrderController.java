@@ -1,6 +1,5 @@
 package org.yourapp.order.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class OrderController {
 
     @ApiResponseMessage(message = "Create order successfully!")
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request) {
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
         CreateOrderCommand createOrderCommand = orderRequestMapper.mapCreateOrderRequestToCreateOrderCommand(request);
         OrderResult orderResult = createOrderInputPort.createOrder(createOrderCommand);
         OrderResponse orderResponse = orderResponseMapper.mapOrderResultToOrderResponse(orderResult);

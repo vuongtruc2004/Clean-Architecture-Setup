@@ -7,7 +7,7 @@
         <Property name="ENVIRONMENT">${spring:spring.profiles.active}</Property>
         <Property name="LOG_LEVEL">${spring:logging.level.root}</Property>
         <Property name="DEV_LOG_PATTERN"><![CDATA[
-%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %highlight{%-5level} [%t] application=${APPLICATION} env=${ENVIRONMENT} logger=%logger{36} message="%msg" traceId=%X{traceId} user.id=%X{userId} user.role=%X{userRole} http.route=%X{httpRoute} http.method=%X{httpMethod} http.clientIp=%X{httpClientIp} http.durationMs=%X{httpDurationMs} http.statusCode=%X{httpStatusCode} error.code=%X{errorCode} error.message="%X{errorMessage}" error.type=%X{errorType} error.stackTrace=%throwable%n
+%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %highlight{%-5level} [%t] application=${APPLICATION} env=${ENVIRONMENT} logger=%logger{36} message=%msg traceId=%X{traceId} user.id=%X{userId} user.role=%X{userRole} http.route=%X{httpRoute} http.method=%X{httpMethod} http.clientIp=%X{httpClientIp} http.durationMs=%X{httpDurationMs} http.statusCode=%X{httpStatusCode} error.code=%X{errorCode} error.message=%X{errorMessage} error.type=%X{errorType} error.stackTrace=%throwable%n
 ]]></Property>
     </Properties>
 

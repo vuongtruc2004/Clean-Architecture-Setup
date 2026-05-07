@@ -33,4 +33,5 @@ server:
 logging:
   config: classpath:log-config/log4j2-spring.xml
   level:
-    root: warn
+    root: info
+

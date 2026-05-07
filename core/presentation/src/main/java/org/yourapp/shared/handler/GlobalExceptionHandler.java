@@ -3,64 +3,61 @@ package org.yourapp.shared.handler;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.yourapp.shared.exception.*;
-import org.yourapp.shared.logging.ExceptionLoggingContext;
+import org.yourapp.shared.exception.ApplicationException;
+import org.yourapp.shared.exception.ErrorCode;
+import org.yourapp.shared.exception.ProblemDetailProperties;
+import org.yourapp.shared.http.ErrorCodeHttpMapper;
+import org.yourapp.shared.http.HttpErrorDescriptor;
+import org.yourapp.shared.logging.ErrorLoggingKeys;
+import org.yourapp.shared.logging.HttpLoggingKeys;
+
+import java.net.URI;
+import java.time.Instant;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private final ProblemDetailFactory problemDetailFactory;
-    private final ExceptionLoggingContext exceptionLoggingContext;
+    private final ErrorCodeHttpMapper errorCodeHttpMapper;
 
-    @ExceptionHandler(NotFoundException.class)
-    public ProblemDetail handleNotFoundException(
-            NotFoundException e,
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<ProblemDetail> handleApplicationException(
+            ApplicationException e,
             HttpServletRequest request
     ) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
         ErrorCode errorCode = e.getErrorCode();
+        HttpErrorDescriptor httpErrorDescriptor = errorCodeHttpMapper
+                .toHttpErrorDescriptor(errorCode);
 
-        ProblemDetail problemDetail = problemDetailFactory.create(
-                ProblemDetailRequest.builder()
-                        .status(status)
-                        .errorCode(errorCode)
-                        .type("https://api.myapp.com/errors/user-not-found")
-                        .detail(e.getMessage())
-                        .instance(request.getRequestURI())
-                        .build()
-        );
+        // create problem detail
+        ProblemDetail problemDetail = ProblemDetail.forStatus(httpErrorDescriptor.status());
+        // set default fields
+        problemDetail.setType(URI.create(httpErrorDescriptor.type()));
+        problemDetail.setTitle(errorCode.getTitle());
+        problemDetail.setDetail(e.getMessage());
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
 
-        exceptionLoggingContext.putApplicationException(status, e);
+        // set custom fields
+        problemDetail.setProperty(ProblemDetailProperties.ERROR_CODE, errorCode.getCode());
+        problemDetail.setProperty(ProblemDetailProperties.TRACE_ID, ThreadContext.get(ProblemDetailProperties.TRACE_ID));
+        problemDetail.setProperty(ProblemDetailProperties.TIMESTAMP, Instant.now().toString());
+
+        // logging
+        // set http fields
+        ThreadContext.put(HttpLoggingKeys.HTTP_STATUS_CODE, String.valueOf(httpErrorDescriptor.status().value()));
+
+        // set error fields
+        ThreadContext.put(ErrorLoggingKeys.ERROR_CODE, errorCode.getCode());
+        ThreadContext.put(ErrorLoggingKeys.ERROR_MESSAGE, e.getMessage());
+        ThreadContext.put(ErrorLoggingKeys.ERROR_TYPE, e.getClass().getSimpleName());
+
         log.warn(errorCode.getTitle(), e);
-        return problemDetail;
-    }
-
-    @ExceptionHandler(InvalidCommandException.class)
-    public ProblemDetail handleInvalidCommandException(
-            InvalidCommandException e,
-            HttpServletRequest request
-    ) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErrorCode errorCode = e.getErrorCode();
-
-        ProblemDetail problemDetail = problemDetailFactory.create(
-                ProblemDetailRequest.builder()
-                        .status(status)
-                        .errorCode(errorCode)
-                        .type("https://api.myapp.com/errors/invalid-command")
-                        .detail(e.getMessage())
-                        .instance(request.getRequestURI())
-                        .build()
-        );
-
-        exceptionLoggingContext.putApplicationException(status, e);
-        log.warn(errorCode.getTitle(), e);
-        return problemDetail;
+        return ResponseEntity.status(httpErrorDescriptor.status()).body(problemDetail);
     }
 }

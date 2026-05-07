@@ -1,6 +1,7 @@
 package org.yourapp.shared.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.ThreadContext;
 import org.jspecify.annotations.Nullable;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import org.yourapp.shared.annotation.ApiResponseMessage;
+import org.yourapp.shared.logging.ContextLoggingKeys;
 import org.yourapp.shared.response.ApiMeta;
 import org.yourapp.shared.response.ApiResponse;
 import org.yourapp.shared.response.PageMeta;
@@ -45,14 +47,14 @@ public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
                 body instanceof ProblemDetail) {
             return body;
         }
-        
+
         ApiResponseMessage apiResponseMessage = returnType.getMethodAnnotation(ApiResponseMessage.class);
         String message = apiResponseMessage == null ? "No message" : apiResponseMessage.message();
 
         if (body instanceof Page<?> page) {
             return ApiResponse.builder()
                     .meta(ApiMeta.createWithPagination(
-                            "test",
+                            ThreadContext.get(ContextLoggingKeys.TRACE_ID),
                             PageMeta.fromPage(page)
                     ))
                     .message(message)
@@ -60,7 +62,7 @@ public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
                     .build();
         }
         return ApiResponse.builder()
-                .meta(ApiMeta.create("test"))
+                .meta(ApiMeta.create(ThreadContext.get(ContextLoggingKeys.TRACE_ID)))
                 .message(message)
                 .data(body)
                 .build();
